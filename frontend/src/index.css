@@ -100,3 +100,26 @@ h1 { font-size: 1.6rem; font-weight: 900; color: #00c853; }
 .user-info { display: flex; align-items: center; gap: 12px; background: white; padding: 6px 6px 6px 15px; border-radius: 16px; border: 1.5px solid #e2e8f0; }
 .user-info span { font-size: 0.9rem; color: #475569; }
 .user-info strong { color: #00c853; font-weight: 800; }
+
+/* 반응형 스타일 추가 */
+@media (max-width: 640px) {
+  .app-container { padding: 15px; }
+  .main-header { flex-direction: column; gap: 15px; align-items: flex-start; }
+  .auth-box { width: 100%; }
+  .user-info { width: 100%; justify-content: space-between; }
+  .btn-login { width: 100%; }
+  
+  .input-grid { grid-template-columns: 1fr; }
+  .card { padding: 20px; border-radius: 20px; }
+  
+  .stats-row { flex-direction: column; gap: 15px; }
+  .stat-item.highlight strong { font-size: 1.8rem; }
+  
+  .summary-bar-black { flex-direction: column; gap: 10px; align-items: flex-start; }
+  .macros-pills { width: 100%; justify-content: space-between; }
+  
+  .diet-tabs { overflow-x: auto; padding-bottom: 5px; }
+  .diet-tabs button { min-width: 80px; font-size: 0.8rem; }
+  
+  .full-info-grid { grid-template-columns: 1fr 1fr; }
+}
