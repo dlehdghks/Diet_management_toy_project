@@ -1,7 +1,8 @@
 import axios from 'axios';
 
+// Docker 배포 환경(주소 하나로 통신)에서는 baseURL을 비워두면 자동으로 현재 도메인을 사용합니다.
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
+  baseURL: import.meta.env.VITE_API_URL || '/api',
   headers: {
     'Content-Type': 'application/json',
   },
