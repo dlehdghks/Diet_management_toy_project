@@ -13,7 +13,10 @@ import models, crud, schemas, auth, diet_service
 from database import get_db, engine, Base
 
 # Create database tables
-models.Base.metadata.create_all(bind=engine)
+try:
+    models.Base.metadata.create_all(bind=engine)
+except Exception as e:
+    print(f"Database connection error: {e}")
 
 app = FastAPI(title="GEMINI Diet API")
 
