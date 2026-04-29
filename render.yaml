@@ -1,13 +1,14 @@
 services:
   - type: web
     name: diet-app-backend
-    env: python
-    buildCommand: pip install -r backend/requirements.txt
-    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    env: docker
+    dockerFilePath: Dockerfile
     envVars:
       - key: DATABASE_URL
-        sync: false # Render 대시보드에서 직접 설정 권장
+        sync: false
       - key: SECRET_KEY
         generateValue: true
       - key: ALGORITHM
         value: HS256
+      - key: PORT
+        value: 8000
