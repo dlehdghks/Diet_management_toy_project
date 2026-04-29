@@ -6,13 +6,14 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
+# Render 배포 시 DATABASE_URL이 환경 변수로 들어옵니다. 없으면 로컬 SQLite 사용.
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./diet_app_v3.db")
 
 # SQLAlchemy 엔진 설정
-# SQLite일 경우에만 check_same_thread 옵션 추가
 if SQLALCHEMY_DATABASE_URL.startswith("sqlite"):
     engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
 else:
+    # PostgreSQL 등 다른 DB의 경우 (SSL 모드 등을 위한 추가 설정이 필요할 수 있음)
     engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

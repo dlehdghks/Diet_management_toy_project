@@ -9,8 +9,12 @@ from jose import JWTError, jwt
 import datetime
 import os
 
-import models, crud, schemas, auth, diet_service
-from database import get_db, engine, Base
+try:
+    from backend import models, crud, schemas, auth, diet_service
+    from backend.database import get_db, engine, Base
+except ImportError:
+    import models, crud, schemas, auth, diet_service
+    from database import get_db, engine, Base
 
 # Create database tables
 try:
