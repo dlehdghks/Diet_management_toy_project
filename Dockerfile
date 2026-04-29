@@ -20,8 +20,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY backend/ ./backend
 COPY --from=frontend-build /app/frontend/dist ./frontend/dist
 
-# PYTHONPATH 설정으로 모듈 찾기 문제 해결
-ENV PYTHONPATH=/app
+# PYTHONPATH 설정으로 모듈 찾기 문제 해결 (루트와 backend 폴더 모두 추가)
+ENV PYTHONPATH=/app:/app/backend
 
 EXPOSE 8000
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# 쉘 형식으로 변경하여 환경변수 $PORT를 정상적으로 인식하게 함
+CMD uvicorn backend.main:app --host 0.0.0.0 --port $PORT

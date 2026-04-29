@@ -9,6 +9,10 @@ load_dotenv()
 # Render 배포 시 DATABASE_URL이 환경 변수로 들어옵니다. 없으면 로컬 SQLite 사용.
 SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./diet_app_v3.db")
 
+# Render/PostgreSQL 호환성: postgres://를 postgresql://로 변환
+if SQLALCHEMY_DATABASE_URL and SQLALCHEMY_DATABASE_URL.startswith("postgres://"):
+    SQLALCHEMY_DATABASE_URL = SQLALCHEMY_DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
 # SQLAlchemy 엔진 설정
 if SQLALCHEMY_DATABASE_URL.startswith("sqlite"):
     engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
