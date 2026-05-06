@@ -29,7 +29,43 @@ h1 { font-size: 1.6rem; font-weight: 900; color: #00c853; }
 .fixed-reason-box p { font-size: 0.85rem; color: #166534; font-weight: 700; line-height: 1.4; text-align: center; }
 
 /* 인라인 산출 근거 박스 */
-.evidence-inline-box { margin-top: 15px; padding: 15px; border-top: 1px solid #f1f5f9; background: #f8fafc; border-radius: 18px; text-align: left; }
+/* Inbody Detail Box */
+.inbody-detail-box {
+  background: #f1f3f5;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.inbody-detail-box .detail-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #495057;
+  margin-bottom: 10px;
+}
+
+.inbody-detail-box .detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.inbody-detail-box .item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  color: #868e96;
+}
+
+.inbody-detail-box .item strong {
+  font-size: 15px;
+  color: #2c3e50;
+  margin-top: 4px;
+}
+
+.evidence-inline-box {
+ margin-top: 15px; padding: 15px; border-top: 1px solid #f1f5f9; background: #f8fafc; border-radius: 18px; text-align: left; }
 .evidence-inline-box p { font-size: 0.8rem; color: #64748b; line-height: 1.6; margin-bottom: 4px; }
 .evidence-inline-box strong { color: #475569; }
 .formula-line-text { font-family: monospace; color: #00c853 !important; font-weight: 700; margin-top: 8px !important; }
@@ -122,4 +158,102 @@ h1 { font-size: 1.6rem; font-weight: 900; color: #00c853; }
   .diet-tabs button { min-width: 80px; font-size: 0.8rem; }
   
   .full-info-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* Profile Card Tabs */
+.card-header-with-tabs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.sub-tabs {
+  display: flex;
+  background: #f1f3f5;
+  padding: 4px;
+  border-radius: 12px;
+}
+
+.sub-tabs button {
+  border: none;
+  background: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #868e96;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sub-tabs button.active {
+  background: white;
+  color: #2c3e50;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* InBody Upload UI */
+.inbody-upload-area {
+  padding: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.upload-box {
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 20px;
+  padding: 40px 20px;
+  transition: all 0.3s;
+}
+
+.upload-box:hover {
+  border-color: #00c853;
+  background: #f1fdf5;
+}
+
+.upload-hint {
+  color: #495057;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.btn-upload-trigger {
+  display: block;
+  background: white;
+  border: 1px solid #ced4da;
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+.btn-analyze {
+  width: 100%;
+  background: #00c853;
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.btn-analyze:active {
+  transform: scale(0.98);
+}
+
+.btn-analyze:disabled {
+  background: #adb5bd;
+  cursor: not-allowed;
 }

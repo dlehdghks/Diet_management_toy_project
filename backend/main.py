@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, status, Query
+from fastapi import FastAPI, Depends, HTTPException, status, Query, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.staticfiles import StaticFiles
@@ -85,8 +85,8 @@ def update_me(user_update: schemas.UserUpdate, current_user: models.User = Depen
 async def get_recommendation(
     age: Optional[int] = None,
     gender: Optional[str] = None,
-    height: Optional[int] = None,
-    weight: Optional[int] = None,
+    height: Optional[float] = None,
+    weight: Optional[float] = None,
     activity_level: Optional[str] = None,
     goal: Optional[str] = None,
     current_user: Optional[models.User] = Depends(get_current_user_optional)
@@ -101,6 +101,7 @@ async def get_recommendation(
     }
     calc = diet_service.calculate_calories(data)
     if not calc: return {"message": "신체 정보를 입력해주세요."}
+    
     rec = diet_service.get_diet_recommendation(data["goal"], calc["target_calories"])
     return {"calculation": calc, "recommendation": rec}
 
@@ -127,8 +128,12 @@ def get_history(current_user: models.User = Depends(get_current_user), db: Sessi
     return list(unique_records.values())
 
 # --- Frontend Serving ---
-# Docker 환경에서는 빌드된 프런트엔드 파일이 이 경로에 위치합니다.
-frontend_dist = os.path.join(os.getcwd(), "frontend/dist")
+# 빌드된 프런트엔드 파일 경로 설정
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+frontend_dist = os.path.join(BASE_DIR, "dist") # Docker용 (backend/dist)
+if not os.path.exists(frontend_dist):
+    # 로컬 개발용 (frontend/dist)
+    frontend_dist = os.path.abspath(os.path.join(BASE_DIR, "..", "frontend", "dist"))
 
 # 정적 파일 서빙
 if os.path.exists(frontend_dist):

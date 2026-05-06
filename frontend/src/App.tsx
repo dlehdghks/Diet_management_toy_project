@@ -21,7 +21,12 @@ function App() {
 
   // Forms
   const [profileForm, setProfileForm] = useState({
-    age: 25, gender: 'male', height: 175, weight: 70, activity_level: 'medium', goal: 'maintain'
+    age: '' as any, 
+    gender: 'male', 
+    height: '' as any, 
+    weight: '' as any, 
+    activity_level: 'medium', 
+    goal: 'maintain'
   });
   const [loginForm, setLoginForm] = useState({ username: '', password: '' });
   const [registerForm, setRegisterForm] = useState({ username: '', password: '' });
@@ -32,13 +37,7 @@ function App() {
 
   useEffect(() => {
     fetchDiet();
-  }, [profileForm]);
-
-  useEffect(() => {
-    if (activeView === 'history' && history.length > 0) {
-      renderChart();
-    }
-  }, [activeView, history]);
+  }, [profileForm.age, profileForm.gender, profileForm.height, profileForm.weight, profileForm.activity_level, profileForm.goal]);
 
   const checkAuth = async () => {
     const token = localStorage.getItem('access_token');
@@ -48,14 +47,15 @@ function App() {
         setCurrentUser(response.data);
         setIsLoggedIn(true);
         if (response.data.height) {
-          setProfileForm({
-            age: response.data.age,
-            gender: response.data.gender,
-            height: response.data.height,
-            weight: response.data.weight,
-            activity_level: response.data.activity_level,
-            goal: response.data.goal
-          });
+          setProfileForm(prev => ({
+            ...prev,
+            age: response.data.age || prev.age,
+            gender: response.data.gender || prev.gender,
+            height: response.data.height || prev.height,
+            weight: response.data.weight || prev.weight,
+            activity_level: response.data.activity_level || prev.activity_level,
+            goal: response.data.goal || prev.goal,
+          }));
         }
         fetchHistory();
       } catch (err) {
@@ -67,6 +67,7 @@ function App() {
   };
 
   const fetchDiet = async () => {
+    if (!profileForm.age || !profileForm.height || !profileForm.weight) return;
     try {
       const response = await dietApi.getRecommendation(profileForm);
       setDietInfo(response.data);
@@ -87,7 +88,7 @@ function App() {
 
   const saveRecord = async () => {
     if (!dietInfo?.calculation?.target_calories) {
-      alert('분석 결과가 아직 생성되지 않았습니다. 신체 정보를 먼저 입력해주세요.');
+      alert('신체 정보를 먼저 입력해주세요.');
       return;
     }
     
@@ -107,8 +108,8 @@ function App() {
       alert('오늘의 정보가 성공적으로 기록되었습니다!');
       await fetchHistory();
     } catch (err: any) { 
-      console.error('저장 실패 상세:', err.response?.data || err.message);
-      alert('저장 중 오류가 발생했습니다. 다시 로그인 후 시도해 보세요.'); 
+      console.error('저장 실패:', err.response?.data || err.message);
+      alert('저장 중 오류가 발생했습니다.'); 
     }
   };
 
@@ -142,12 +143,18 @@ function App() {
     setActiveView('home');
   };
 
+  useEffect(() => {
+    if (activeView === 'history' && history.length > 0) {
+      renderChart();
+    }
+  }, [activeView, history]);
+
   const renderChart = () => {
     if (!chartRef.current) return;
     if (weightChart.current) weightChart.current.destroy();
     
-    const labels = history.map(h => new Date(h.date).toLocaleDateString());
-    const weights = history.map(h => h.weight);
+    const labels = history.slice().reverse().map(h => new Date(h.date).toLocaleDateString());
+    const weights = history.slice().reverse().map(h => h.weight);
 
     weightChart.current = new Chart(chartRef.current, {
       type: 'line',
@@ -209,7 +216,7 @@ function App() {
                 <div className="input-grid">
                   <div className="field">
                     <label>나이</label>
-                    <input type="number" value={profileForm.age} onChange={e => setProfileForm({...profileForm, age: Number(e.target.value)})} />
+                    <input type="number" value={profileForm.age || ''} onChange={e => setProfileForm({...profileForm, age: Number(e.target.value)})} />
                   </div>
                   <div className="field">
                     <label>성별</label>
@@ -220,11 +227,11 @@ function App() {
                   </div>
                   <div className="field">
                     <label>키 (cm)</label>
-                    <input type="number" value={profileForm.height} onChange={e => setProfileForm({...profileForm, height: Number(e.target.value)})} />
+                    <input type="number" value={profileForm.height || ''} onChange={e => setProfileForm({...profileForm, height: Number(e.target.value)})} />
                   </div>
                   <div className="field">
                     <label>몸무게 (kg)</label>
-                    <input type="number" value={profileForm.weight} onChange={e => setProfileForm({...profileForm, weight: Number(e.target.value)})} />
+                    <input type="number" value={profileForm.weight || ''} onChange={e => setProfileForm({...profileForm, weight: Number(e.target.value)})} />
                   </div>
                   <div className="field">
                     <label>활동량</label>

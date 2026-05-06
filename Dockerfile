@@ -10,8 +10,11 @@ RUN npm run build
 FROM python:3.11-slim
 WORKDIR /app
 
-# PostgreSQL 연결을 위한 의존성 설치 (psycopg2-binary 사용 시 불필요할 수 있으나 안전을 위해 추가)
-RUN apt-get update && apt-get install -y libpq-dev gcc && rm -rf /var/lib/apt/lists/*
+# PostgreSQL 연결 의존성 설치
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY backend/requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
